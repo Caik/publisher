@@ -1,0 +1,38 @@
+version: '3'
+services:
+    pub-api:
+        build: .
+        image: 'pub-api:1.0'
+        volumes:
+            - '.:${APP_DIRECTORY}'
+            - '${APP_DIRECTORY}/node_modules'
+        ports:
+            - '${API_LOCAL_PORT}:${API_CONTAINER_PORT}'
+        command:
+            - './wait-for-it.sh'
+            - 'pub-db:${DB_CONTAINER_PORT}'
+            - '--'
+            - 'yarn'
+            - 'run'
+            - 'serve'
+        environment:
+            - 'API_CONTAINER_PORT=${API_CONTAINER_PORT}'
+            - 'DB_CONTAINER_PORT=${DB_CONTAINER_PORT}'
+            - 'DB_DATABASE_NAME=${DB_DATABASE_NAME}'
+            - 'DB_CONTAINER_HOST=${DB_CONTAINER_HOST}'
+        networks:
+            - pub
+    pub-db:
+        image: mongo
+        volumes:
+            - 'db-data:/data/db'
+        ports:
+            - '${DB_LOCAL_PORT}:${DB_CONTAINER_PORT}'
+        networks:
+            - pub
+
+volumes:
+    db-data: null
+networks:
+    pub:
+        driver: bridge
