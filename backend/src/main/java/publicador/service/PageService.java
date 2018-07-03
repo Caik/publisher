@@ -1,6 +1,10 @@
 package publicador.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import publicador.graphql.input.CreatePageInput;
@@ -10,6 +14,9 @@ import publicador.repository.PageRepository;
 
 @Service
 public class PageService {
+
+	@Autowired
+	private MongoOperations mongoTemplate;
 
 	@Autowired
 	private PageRepository pageRepository;
@@ -24,13 +31,16 @@ public class PageService {
 	}
 
 	public Page update(UpdatePageInput pageInput) {
-		Page page = new Page();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("_id").is(pageInput.getId()));
 
-		page.setId(pageInput.getId());
-		page.setUrl(pageInput.getUrl());
-		page.setTitle(pageInput.getTitle());
+		Update update = new Update();
+		update.set("url", pageInput.getUrl());
+		update.set("title", pageInput.getTitle());
 
-		return this.pageRepository.save(page);
+		this.mongoTemplate.upsert(query, update, Page.class);
+
+		return this.findById(pageInput.getId());
 	}
 
 	public boolean delete(String id) {

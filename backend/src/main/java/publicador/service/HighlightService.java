@@ -1,6 +1,10 @@
 package publicador.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import publicador.graphql.input.CreateHighlightInput;
@@ -10,6 +14,9 @@ import publicador.repository.HighlightRepository;
 
 @Service
 public class HighlightService {
+
+	@Autowired
+	private MongoOperations mongoTemplate;
 
 	@Autowired
 	private HighlightRepository highlightRepository;
@@ -30,16 +37,19 @@ public class HighlightService {
 	}
 
 	public Highlight update(UpdateHighlightInput highlightInput) {
-		Highlight highlight = new Highlight();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("_id").is(highlightInput.getId()));
 
-		highlight.setId(highlightInput.getId());
-		highlight.setUri(highlightInput.getUri());
-		highlight.setTitle(highlightInput.getTitle());
-		highlight.setSubtitle(highlightInput.getSubtitle());
-		highlight.setText(highlightInput.getText());
-		highlight.setPage(this.pageService.findById(highlightInput.getIdPage()));
+		Update update = new Update();
+		update.set("uri", highlightInput.getUri());
+		update.set("title", highlightInput.getTitle());
+		update.set("subtitle", highlightInput.getSubtitle());
+		update.set("text", highlightInput.getText());
+		update.set("page", this.pageService.findById(highlightInput.getIdPage()));
 
-		return this.highlightRepository.save(highlight);
+		this.mongoTemplate.upsert(query, update, Highlight.class);
+
+		return this.findById(highlightInput.getId());
 	}
 
 	public boolean delete(String id) {
@@ -50,6 +60,10 @@ public class HighlightService {
 		}
 
 		return true;
+	}
+
+	public Highlight findById(String idHighlight) {
+		return this.highlightRepository.findById(idHighlight).orElse(null);
 	}
 
 }
