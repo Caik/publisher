@@ -1,0 +1,12 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+	<h2>{{ this.title }}</h2>
+
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li *ngFor="let item of breadcrumb; let i = index" class="breadcrumb-item">
+				<a *ngIf="breadcrumb.length !== i + 1" [routerLink]=item[1]>{{ item[0] }}</a>
+				<a *ngIf="breadcrumb.length === i + 1">{{ item[0] }}</a>
+			</li>
+		</ol>
+	</nav>
+</div>

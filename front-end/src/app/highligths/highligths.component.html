@@ -1,0 +1,67 @@
+<app-breadcrumb [title]=this.title [breadcrumb]=this.breadcrumb></app-breadcrumb>
+
+<div style="padding-bottom: 20px">
+	<button type="button" class="btn btn-success" routerLink="/highlights/edit">
+		<i class="fas fa-plus fa-sm"></i>
+		Novo Destaque</button>
+</div>
+
+<table class="table table-hover table-bordered table-striped text-center">
+	<thead>
+		<tr>
+			<th scope="col">Titulo</th>
+			<th scope="col">Subtítulo</th>
+			<th scope="col">URL</th>
+			<th scope="col">Página</th>
+			<th scope="col" style="width: 200px">Ações</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let hl of highlights | async">
+			<td>{{ hl.title }}</td>
+			<td>{{ hl.subtitle }}</td>
+			<td>{{ hl.uri }}</td>
+			<td>
+				<a routerLink="/pages/edit/{{ hl.page.id }}">{{ hl.page.title }}</a>
+			</td>
+			<td>
+				<button class="btn btn-warning btn-sm" routerLink="/highlights/edit/{{ hl.id }}">
+					<i class="fas fa-pen fa-sm"></i>
+					Editar
+				</button>
+				&nbsp;
+				<button class="btn btn-danger btn-sm" data-title="Edit" data-toggle="modal" data-target="#edit">
+					<i class="fas fa-times fa-sm"></i>
+					Remover
+				</button>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<!-- <ng-template #content let-c="close" let-d="dismiss">
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+		<button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+			<i class="fas fa-times"></i>
+		</button>
+	</div>
+	<div class="modal-body">
+		<form>
+			<div class="form-group">
+				<label for="dateOfBirth">Date of birth</label>
+				<div class="input-group">
+					<input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
+					<div class="input-group-append">
+						<button class="btn btn-outline-secondary" (click)="dp.toggle()" type="button"></button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-outline-dark">Save</button>
+	</div>
+</ng-template>
+
+<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button> -->
