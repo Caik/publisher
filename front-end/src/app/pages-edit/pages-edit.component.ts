@@ -33,23 +33,18 @@ export class PagesEditComponent implements OnInit, OnDestroy {
 		private router: Router) { }
 
 	ngOnInit() {
-		this.page = {
-			id: '',
-			title: '',
-			url: '',
-			highlights: []
-		};
-
 		if (this.route.snapshot.paramMap.get('id')) {
 			this.edit = true;
 			this.pageTitle = 'Editar Página';
 			this.breadcrumb[this.breadcrumb.length - 1][0] = 'Editar Página';
-			this.pagesService.getpage(this.route.snapshot.paramMap.get('id')).subscribe(result => this.initializeForm(result));
+			this.pagesService.getPage(this.route.snapshot.paramMap.get('id')).subscribe(result => this.initializeForm(result));
 		}
 
-		this.form = this.fb.group({
-			title: [this.page.title, Validators.required],
-			url: [this.page.url, Validators.required]
+		this.initializeForm({
+			id: '',
+			title: '',
+			url: '',
+			highlights: []
 		});
 	}
 

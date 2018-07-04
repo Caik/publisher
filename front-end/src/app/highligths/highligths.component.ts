@@ -6,6 +6,7 @@ import gql from 'graphql-tag';
 import { Query } from '../graphql/query';
 
 import { Highlight } from '../graphql/highlight';
+import { HighlightsService } from '../highlights.service';
 
 @Component({
 	selector: 'app-highligths',
@@ -15,7 +16,6 @@ import { Highlight } from '../graphql/highlight';
 export class HighligthsComponent implements OnInit {
 
 	title = 'Destaques';
-
 	highlights: Observable<Highlight[]>;
 
 	breadcrumb = [
@@ -23,28 +23,10 @@ export class HighligthsComponent implements OnInit {
 		['Destaques', '/highlights']
 	];
 
-	constructor(private apollo: Apollo) { }
+	constructor(private apollo: Apollo, private hlService: HighlightsService) { }
 
 	ngOnInit() {
-		this.highlights = this.apollo.watchQuery<Query>({
-			query: gql`
-				query allHighlights {
-					getHighlights {
-						id
-						title
-						uri
-						subtitle
-						page {
-							id
-							title
-						}
-					}
-				}
-			`,
-			fetchResults: true,
-			fetchPolicy: 'network-only'
-		}).valueChanges
-			.pipe(map(result => result.data.getHighlights));
+		this.highlights = this.hlService.getHighlights();
 	}
 
 }

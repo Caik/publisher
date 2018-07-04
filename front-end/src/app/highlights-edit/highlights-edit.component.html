@@ -1,46 +1,52 @@
-<app-breadcrumb [title]=this.title [breadcrumb]=this.breadcrumb></app-breadcrumb>
+<app-breadcrumb [title]=this.pageTitle [breadcrumb]=this.breadcrumb></app-breadcrumb>
 
-<!-- <form> -->
-<div class="form-group">
-	<label for="titleInput">Título</label>
-	<input id="titleInput" type="text" class="form-control" placeholder="Home de esportes">
-</div>
+<ngb-alert *ngIf="showAlert" type="success" (close)="showAlert=redirectToList">{{ sucessMessage }}</ngb-alert>
 
-<div class="form-group">
-	<label for="subtitleInput">Subtítulo</label>
-	<input id="subtitleInput" type="text" class="form-control" placeholder="esportes/home">
-</div>
+<form [formGroup]="form" (ngSubmit)="onFormSubmit()">
+	<div class="form-group">
+		<label for="titleInput">Título</label>
+		<input id="titleInput" type="text" class="form-control" placeholder="Home de esportes" formControlName="title">
+		<small class="form-text text-danger font-weight-bold" *ngIf="title.invalid && title.touched">{{ getRequiredField('Título') }}</small>
+	</div>
 
-<div class="form-group">
-	<label for="textInput">Texto</label>
-	<textarea id="textInput" class="form-control rounded-50" id="exampleFormControlTextarea1" rows="5" placeholder="Texto do destaque"></textarea>
-</div>
+	<div class="form-group">
+		<label for="subtitleInput">Subtítulo</label>
+		<input id="subtitleInput" type="text" class="form-control" placeholder="esportes/home" formControlName="subtitle">
+		<small class="form-text text-danger font-weight-bold" *ngIf="subtitle.invalid && subtitle.touched">{{ getRequiredField('Subtítulo') }}</small>
+	</div>
 
-<div class="form-group">
-	<label for="pageInput">Página</label>
-	<select id="pageInput" class="form-control">
-		<option>Selecione uma página</option>
-		<option>1</option>
-		<option>2</option>
-	</select>
-</div>
+	<div class="form-group">
+		<label for="textInput">Texto</label>
+		<textarea id="textInput" class="form-control rounded-50" id="exampleFormControlTextarea1" rows="5" placeholder="Texto do destaque"
+		    formControlName="text"></textarea>
+		<small class="form-text text-danger font-weight-bold" *ngIf="text.invalid && text.touched">{{ getRequiredField('Texto') }}</small>
+	</div>
 
-<div class="form-group">
-	<label for="uriInput">URL</label>
-	<input id="uriInput" type="text" class="form-control" placeholder="destaque/url/customizada">
-</div>
+	<div class="form-group">
+		<label for="pageInput">Página</label>
+		<select id="pageInput" class="form-control" formControlName="page" [compareWith]="compare">
+			<option *ngIf="!edit" [ngValue]="null" disabled>Selecione a página</option>
+			<option *ngFor="let page of pages | async" [ngValue]="page">{{ page.title }}</option>
+		</select>
+		<small class="form-text text-danger font-weight-bold" *ngIf="page.invalid && page.touched">{{ getRequiredField('Página') }}</small>
+	</div>
 
-<div class="form-group">
-	<div class="row">
-		<div class="col-md-6">
-			<button class="btn btn-danger btn-block" type="reset">
-				<i class="fas fa-trash-alt fa-sm"></i> Limpar campos</button>
-		</div>
-		<div class="col-md-6">
-			<button class="btn btn-success btn-block" type="submit">
-				<i class="fas fa-check fa-sm"></i> Salvar</button>
+	<div class="form-group">
+		<label for="uriInput">URL</label>
+		<input id="uriInput" type="text" class="form-control" placeholder="destaque/url/customizada" formControlName="uri">
+		<small class="form-text text-danger font-weight-bold" *ngIf="uri.invalid && uri.touched">{{ getRequiredField('URL') }}</small>
+	</div>
 
+	<div class="form-group">
+		<div class="row">
+			<div class="col-md-6">
+				<button class="btn btn-danger btn-block" type="reset">
+					<i class="fas fa-trash-alt fa-sm"></i> Limpar campos</button>
+			</div>
+			<div class="col-md-6">
+				<button class="btn btn-success btn-block" type="submit" [disabled]="!form.valid">
+					<i class="fas fa-check fa-sm"></i> Salvar</button>
+			</div>
 		</div>
 	</div>
-</div>
-<!-- </form> -->
+</form>

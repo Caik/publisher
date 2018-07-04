@@ -22,9 +22,6 @@ export class PagesService {
 						id
 						url
 						title
-						highlights {
-							id
-						}
 					}
 				}
 			`,
@@ -33,7 +30,7 @@ export class PagesService {
 		}).valueChanges.pipe(map(result => result.data.getPages));
 	}
 
-	getpage(id: String): Observable<Page> {
+	getPage(id: String): Observable<Page> {
 		return this.apollo.query<Query>({
 			query: gql`
 				query getPage($id: String!) {
