@@ -4,7 +4,7 @@ type Highlight {
 	title: String!
 	subtitle: String!
 	text: String!
-	page: Page!
+	page: Page
 }
 
 input CreateHighlightInput {

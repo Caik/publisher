@@ -45,8 +45,14 @@ public class HighlightService {
 	public Highlight update(UpdateHighlightInput highlightInput) {
 		Highlight highlight = this.findById(highlightInput.getId());
 
+		Page pageFrom = null;
+
+		try {
+			pageFrom = this.pageService.findById(highlight.getPage().getId());
+		} catch (Exception e) {
+		}
+
 		Page pageTo = this.pageService.findById(highlightInput.getIdPage());
-		Page pageFrom = this.pageService.findById(highlight.getPage().getId());
 
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(highlightInput.getId()));
@@ -81,8 +87,8 @@ public class HighlightService {
 		return true;
 	}
 
-	public Highlight findById(String idHighlight) {
-		return this.highlightRepository.findById(idHighlight).orElse(null);
+	public Highlight findById(String id) {
+		return this.highlightRepository.findById(id).orElse(null);
 	}
 
 }

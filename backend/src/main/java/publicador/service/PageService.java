@@ -7,10 +7,13 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import com.mongodb.DBRef;
+
 import publicador.graphql.input.CreatePageInput;
 import publicador.graphql.input.UpdatePageInput;
 import publicador.model.Highlight;
 import publicador.model.Page;
+import publicador.repository.HighlightRepository;
 import publicador.repository.PageRepository;
 
 @Service
@@ -21,6 +24,9 @@ public class PageService {
 
 	@Autowired
 	private PageRepository pageRepository;
+
+	@Autowired
+	private HighlightRepository highlightRepository;
 
 	public Page create(CreatePageInput pageInput) {
 		Page page = new Page();
@@ -58,6 +64,14 @@ public class PageService {
 	}
 
 	public boolean delete(String id) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("page").is(new DBRef("page", id)));
+
+		Update update = new Update();
+		update.set("page", null);
+
+		this.mongoTemplate.upsert(query, update, Highlight.class);
+
 		try {
 			this.pageRepository.deleteById(id);
 		} catch (Exception e) {
@@ -67,8 +81,8 @@ public class PageService {
 		return true;
 	}
 
-	public Page findById(String idPage) {
-		return this.pageRepository.findById(idPage).orElse(null);
+	public Page findById(String id) {
+		return this.pageRepository.findById(id).orElse(null);
 	}
 
 }
