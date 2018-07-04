@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import com.mongodb.DBRef;
+
 import publicador.graphql.input.CreateHighlightInput;
 import publicador.graphql.input.UpdateHighlightInput;
 import publicador.model.Highlight;
@@ -78,6 +80,11 @@ public class HighlightService {
 	}
 
 	public boolean delete(String id) {
+		Update update = new Update();
+		update.pull("highlights", new DBRef("highlight", id));
+
+		this.mongoTemplate.upsert(new Query(), update, Page.class);
+
 		try {
 			this.highlightRepository.deleteById(id);
 		} catch (Exception e) {
