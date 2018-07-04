@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { PagesService } from '../pages.service';
+import { Page } from '../graphql/page';
 
 @Component({
 	selector: 'app-pages-view',
@@ -8,6 +12,7 @@ import { Component, OnInit } from '@angular/core';
 export class PagesViewComponent implements OnInit {
 
 	title = 'Visualizar Página';
+	page: Page;
 
 	breadcrumb = [
 		['Home', '/home'],
@@ -15,9 +20,11 @@ export class PagesViewComponent implements OnInit {
 		['Visualizar Página', '/pages/view']
 	];
 
-	constructor() { }
+	constructor(
+		private route: ActivatedRoute, private pagesService: PagesService) { }
 
 	ngOnInit() {
+		this.pagesService.getPage(this.route.snapshot.paramMap.get('id')).subscribe(result => this.page = result);
 	}
 
 }

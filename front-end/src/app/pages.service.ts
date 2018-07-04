@@ -38,6 +38,13 @@ export class PagesService {
 						id
 						title
 						url
+						highlights {
+							id
+							title
+							subtitle
+							text
+							uri
+						}
 					}
 				}
 			`,
