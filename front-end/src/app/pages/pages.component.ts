@@ -13,25 +13,46 @@ import { PagesService } from '../pages.service';
 export class PagesComponent implements OnInit {
 
 	title = 'Páginas';
-
 	pages: Observable<Page[]>;
+	pageToExclude: Page;
+	showAlert: Boolean = false;
 
 	breadcrumb = [
 		['Home', '/home'],
 		['Páginas', '/pages']
 	];
 
-	constructor(private pagesService: PagesService, private modalService: NgbModal) {
+	constructor(private pagesService: PagesService, private modalService: NgbModal) { }
+
+	openDeleteModal(content, page) {
+		this.pageToExclude = page;
+		this.modalService.open(content, { centered: true }).result
+			.then((deleteFlg) => {
+				if (deleteFlg) {
+					this.deletePage(page);
+				}
+			}, () => { });
 	}
 
-	open(content) {
-		this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-		}, (reason) => {
+	deletePage(page: Page) {
+		// Chamar service
+		this.pagesService.deletePage(page).subscribe(() => {
+			this.showAlert = true;
+			this.pages = this.pagesService.getPagesList();
+			this.pageToExclude = null;
+
+			setTimeout(() => {
+				this.showAlert = false;
+			}, 2000);
 		});
 	}
 
 	ngOnInit() {
 		this.pages = this.pagesService.getPagesList();
+	}
+
+	get sucessMessage(): String {
+		return `Página excluida com sucesso!`;
 	}
 
 }

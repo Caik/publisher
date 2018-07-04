@@ -67,7 +67,6 @@ export class PagesService {
 	}
 
 	updatePage(page: Page): Observable<Page> {
-		console.log(page);
 		return this.apollo.mutate<Page>({
 			mutation: gql`
 				mutation UpdatePage($input: UpdatePageInput!) {
@@ -82,6 +81,19 @@ export class PagesService {
 				}
 			}
 		}).pipe(map(result => result.data.updatePage));
+	}
+
+	deletePage(page: Page): Observable<Boolean> {
+		return this.apollo.mutate<Boolean>({
+			mutation: gql`
+				mutation DeletePage($id: String!) {
+					deletePage(id: $id)
+				}
+			`,
+			variables: {
+				id: page.id
+			}
+		}).pipe(map(result => result.data.deletePage));
 	}
 
 }

@@ -97,8 +97,8 @@ export class HighlightsEditComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	compare(h1: Page, h2: Page): Boolean {
-		return h1.id === h2.id;
+	compare(p1: Page, p2: Page): Boolean {
+		return p1 && p2 && (p1.id === p2.id);
 	}
 
 	redirectToList(): void {

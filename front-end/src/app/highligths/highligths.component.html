@@ -22,7 +22,7 @@
 			<td>{{ hl.subtitle }}</td>
 			<td>{{ hl.uri }}</td>
 			<td>
-				<a routerLink="/pages/edit/{{ hl.page.id }}">{{ hl.page.title }}</a>
+				<a *ngIf="hl.page" routerLink="/pages/edit/{{ hl.page.id }}">{{ hl.page.title }}</a>
 			</td>
 			<td>
 				<button class="btn btn-warning btn-sm" routerLink="/highlights/edit/{{ hl.id }}">
@@ -38,30 +38,3 @@
 		</tr>
 	</tbody>
 </table>
-
-<!-- <ng-template #content let-c="close" let-d="dismiss">
-	<div class="modal-header">
-		<h4 class="modal-title" id="modal-basic-title">Profile update</h4>
-		<button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-			<i class="fas fa-times"></i>
-		</button>
-	</div>
-	<div class="modal-body">
-		<form>
-			<div class="form-group">
-				<label for="dateOfBirth">Date of birth</label>
-				<div class="input-group">
-					<input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
-					<div class="input-group-append">
-						<button class="btn btn-outline-secondary" (click)="dp.toggle()" type="button"></button>
-					</div>
-				</div>
-			</div>
-		</form>
-	</div>
-	<div class="modal-footer">
-		<button type="button" class="btn btn-outline-dark">Save</button>
-	</div>
-</ng-template>
-
-<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button> -->
