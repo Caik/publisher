@@ -22,6 +22,9 @@ export class PagesService {
 						id
 						url
 						title
+						highlights {
+							id
+						}
 					}
 				}
 			`,

@@ -25,7 +25,7 @@
 	<div class="form-group">
 		<label for="pageInput">Página</label>
 		<select id="pageInput" class="form-control" formControlName="page" [compareWith]="compare">
-			<option *ngIf="!edit" [ngValue]="null" disabled>Selecione a página</option>
+			<option *ngIf="!edit" [value]="null" selected disabled>Selecione a página</option>
 			<option *ngFor="let page of pages | async" [ngValue]="page">{{ page.title }}</option>
 		</select>
 		<small class="form-text text-danger font-weight-bold" *ngIf="page.invalid && page.touched">{{ getRequiredField('Página') }}</small>

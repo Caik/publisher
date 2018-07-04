@@ -33,7 +33,6 @@ const appRoutes: Routes = [
 	{ path: 'highlights/edit/:id', component: HighlightsEditComponent },
 
 	{ path: '', redirectTo: '/home', pathMatch: 'full' },
-	// { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({
@@ -57,7 +56,7 @@ const appRoutes: Routes = [
 		RouterModule.forRoot(
 			appRoutes
 		),
-		HttpClientModule, // provides HttpClient for HttpLink
+		HttpClientModule,
 		ApolloModule,
 		HttpLinkModule,
 		ReactiveFormsModule
