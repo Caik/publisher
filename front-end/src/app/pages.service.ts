@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import gql from 'graphql-tag';
 
 import { Page } from './graphql/page';
 import { Query } from './graphql/query';
@@ -14,7 +14,7 @@ export class PagesService {
 
 	constructor(private apollo: Apollo) { }
 
-	getPagesList(): Observable<Page[]> {
+	getPages(): Observable<Page[]> {
 		return this.apollo.watchQuery<Query>({
 			query: gql`
 				query allPages {

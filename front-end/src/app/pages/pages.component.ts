@@ -35,10 +35,9 @@ export class PagesComponent implements OnInit {
 	}
 
 	deletePage(page: Page) {
-		// Chamar service
 		this.pagesService.deletePage(page).subscribe(() => {
 			this.showAlert = true;
-			this.pages = this.pagesService.getPagesList();
+			this.pages = this.pagesService.getPages();
 			this.pageToExclude = null;
 
 			setTimeout(() => {
@@ -48,7 +47,7 @@ export class PagesComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.pages = this.pagesService.getPagesList();
+		this.pages = this.pagesService.getPages();
 	}
 
 	get sucessMessage(): String {

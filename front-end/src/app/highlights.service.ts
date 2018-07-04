@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { Highlight } from './graphql/highlight';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import gql from 'graphql-tag';
 
 import { Query } from './graphql/query';
+import { Highlight } from './graphql/highlight';
 
 @Injectable({
 	providedIn: 'root'
@@ -103,6 +103,19 @@ export class HighlightsService {
 				}
 			}
 		}).pipe(map(result => result.data.updateHighlight));
+	}
+
+	deleteHighlight(highlight: Highlight): Observable<Boolean> {
+		return this.apollo.mutate<Boolean>({
+			mutation: gql`
+				mutation DeleteHighlight($id: String!) {
+					deleteHighlight(id: $id)
+				}
+			`,
+			variables: {
+				id: highlight.id
+			}
+		}).pipe(map(result => result.data.deleteHighlight));
 	}
 
 }

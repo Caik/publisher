@@ -38,7 +38,7 @@ export class HighlightsEditComponent implements OnInit, OnDestroy {
 	) { }
 
 	ngOnInit() {
-		this.pages = this.pagesService.getPagesList();
+		this.pages = this.pagesService.getPages();
 
 		if (this.route.snapshot.paramMap.get('id')) {
 			this.edit = true;
