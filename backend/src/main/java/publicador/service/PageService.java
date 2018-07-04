@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import publicador.graphql.input.CreatePageInput;
 import publicador.graphql.input.UpdatePageInput;
+import publicador.model.Highlight;
 import publicador.model.Page;
 import publicador.repository.PageRepository;
 
@@ -41,6 +42,19 @@ public class PageService {
 		this.mongoTemplate.upsert(query, update, Page.class);
 
 		return this.findById(pageInput.getId());
+	}
+
+	public Page addPageHighlight(Page page, Highlight highlight) {
+		page = this.findById(page.getId());
+		page.getHighlights().add(highlight);
+
+		return this.pageRepository.save(page);
+	}
+
+	public Page removePageHighlight(Page page, Highlight highlight) {
+		page.getHighlights().remove(highlight);
+
+		return this.pageRepository.save(page);
 	}
 
 	public boolean delete(String id) {

@@ -1,6 +1,7 @@
 package publicador.model;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -17,7 +18,7 @@ public class Page {
 	private String title;
 
 	@DBRef
-	private List<Highlight> highlights;
+	private Set<Highlight> highlights = new HashSet<>();
 
 	public String getId() {
 		return id;
@@ -43,11 +44,11 @@ public class Page {
 		this.title = title;
 	}
 
-	public List<Highlight> getHighlights() {
+	public Set<Highlight> getHighlights() {
 		return highlights;
 	}
 
-	public void setHighlights(List<Highlight> highlights) {
+	public void setHighlights(Set<Highlight> highlights) {
 		this.highlights = highlights;
 	}
 
