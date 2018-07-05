@@ -12,12 +12,20 @@ public class MongoDBConfiguration extends AbstractMongoConfiguration {
 
 	@Override
 	protected String getDatabaseName() {
-		return "publicador";
+		if (System.getenv("DB_DATABASE_NAME") == null) {
+			return "publicador";
+		}
+
+		return System.getenv("DB_DATABASE_NAME");
 	}
 
 	@Override
 	public MongoClient mongoClient() {
-		return new MongoClient();
+		if (System.getenv("DB_CONTAINER_HOST") == null) {
+			return new MongoClient();
+		}
+
+		return new MongoClient(System.getenv("DB_CONTAINER_HOST"));
 	}
 
 }

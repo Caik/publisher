@@ -19,6 +19,7 @@ import { PagesEditComponent } from './pages-edit/pages-edit.component';
 import { PagesViewComponent } from './pages-view/pages-view.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PagesService } from './pages.service';
+import { environment } from '../environments/environment';
 
 const appRoutes: Routes = [
 	{ path: 'home', component: HomeComponent },
@@ -75,11 +76,6 @@ export class AppModule {
 	}
 
 	getURL(): String {
-		const url: String = 'http://localhost:8080/graphql';
-
-		// url += (process.env.API_LOCAL_URL || 'localhost');
-		// url += ':' + (process.env.API_LOCAL_PORT || '8080');
-
-		return url;
+		return `${environment.backendUrl}/graphql`;
 	}
 }

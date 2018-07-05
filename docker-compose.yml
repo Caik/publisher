@@ -1,25 +1,26 @@
 version: '3'
 services:
-    pub-api:
-        build: .
-        image: 'pub-api:1.0'
-        volumes:
-            - '.:${APP_DIRECTORY}'
-            - '${APP_DIRECTORY}/node_modules'
+    pub-back-end:
+        build:
+            context: .
+            dockerfile: 'Dockerfile-back-end'
+        image: 'pub-back-end:latest'
         ports:
-            - '${API_LOCAL_PORT}:${API_CONTAINER_PORT}'
-        command:
-            - './wait-for-it.sh'
-            - 'pub-db:${DB_CONTAINER_PORT}'
-            - '--'
-            - 'yarn'
-            - 'run'
-            - 'serve'
+            - '${BACK_LOCAL_PORT}:${BACK_CONTAINER_PORT}'
+        networks:
+            - pub
         environment:
-            - 'API_CONTAINER_PORT=${API_CONTAINER_PORT}'
-            - 'DB_CONTAINER_PORT=${DB_CONTAINER_PORT}'
             - 'DB_DATABASE_NAME=${DB_DATABASE_NAME}'
             - 'DB_CONTAINER_HOST=${DB_CONTAINER_HOST}'
+        depends_on:
+            - pub-db
+    pub-front-end:
+        build:
+            context: .
+            dockerfile: 'Dockerfile-front-end'
+        image: 'pub-front-end:latest'
+        ports:
+            - '${FRONT_LOCAL_PORT}:${FRONT_CONTAINER_PORT}'
         networks:
             - pub
     pub-db:
@@ -30,7 +31,6 @@ services:
             - '${DB_LOCAL_PORT}:${DB_CONTAINER_PORT}'
         networks:
             - pub
-
 volumes:
     db-data: null
 networks:
