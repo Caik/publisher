@@ -9,4 +9,5 @@ public class PublicadorApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PublicadorApplication.class, args);
 	}
+
 }

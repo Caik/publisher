@@ -17,14 +17,14 @@ public class PageMutation implements GraphQLMutationResolver {
 	private PageService pageService;
 
 	public Page createPage(CreatePageInput pageInput) {
-		return this.pageService.create(pageInput);
+		return this.pageService.createPage(pageInput);
 	}
 
 	public Page updatePage(UpdatePageInput pageInput) {
-		return this.pageService.update(pageInput);
+		return this.pageService.updatePage(pageInput);
 	}
 
 	public boolean deletePage(String id) {
-		return this.pageService.delete(id);
+		return this.pageService.deletePage(id);
 	}
 }

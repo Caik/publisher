@@ -1,17 +1,27 @@
 package publicador.graphql.input;
 
+import org.directwebremoting.annotations.DataTransferObject;
+import org.directwebremoting.annotations.RemoteProperty;
+
+@DataTransferObject
 public class UpdateHighlightInput {
 
+	@RemoteProperty
 	private String id;
 
+	@RemoteProperty
 	private String uri;
 
+	@RemoteProperty
 	private String title;
 
+	@RemoteProperty
 	private String subtitle;
 
+	@RemoteProperty
 	private String text;
 
+	@RemoteProperty
 	private String idPage;
 
 	public String getId() {

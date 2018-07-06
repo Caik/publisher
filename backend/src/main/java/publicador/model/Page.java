@@ -3,21 +3,28 @@ package publicador.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.directwebremoting.annotations.DataTransferObject;
+import org.directwebremoting.annotations.RemoteProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
+@DataTransferObject
 public class Page {
 
 	@Id
+	@RemoteProperty
 	private String id;
 
+	@RemoteProperty
 	private String url;
 
+	@RemoteProperty
 	private String title;
 
 	@DBRef
+	@RemoteProperty
 	private Set<Highlight> highlights = new HashSet<>();
 
 	public String getId() {

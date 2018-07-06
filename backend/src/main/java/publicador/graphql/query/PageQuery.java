@@ -8,19 +8,19 @@ import org.springframework.stereotype.Component;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 
 import publicador.model.Page;
-import publicador.repository.PageRepository;
+import publicador.service.PageService;
 
 @Component
 public class PageQuery implements GraphQLQueryResolver {
 
 	@Autowired
-	private PageRepository pageRepository;
+	private PageService pageService;
 
 	public Page getPage(String id) {
-		return this.pageRepository.findById(id).orElse(null);
+		return this.pageService.getPage(id);
 	}
 
 	public List<Page> getPages() {
-		return this.pageRepository.findAll();
+		return this.pageService.getPages();
 	}
 }

@@ -1,11 +1,14 @@
 package publicador.service;
 
+import java.util.List;
+
+import org.directwebremoting.annotations.RemoteMethod;
+import org.directwebremoting.annotations.RemoteProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.stereotype.Service;
 
 import com.mongodb.DBRef;
 
@@ -15,7 +18,7 @@ import publicador.model.Highlight;
 import publicador.model.Page;
 import publicador.repository.HighlightRepository;
 
-@Service
+@RemoteProxy
 public class HighlightService {
 
 	@Autowired
@@ -27,9 +30,20 @@ public class HighlightService {
 	@Autowired
 	private PageService pageService;
 
+	@RemoteMethod
+	public List<Highlight> getHighlights() {
+		return this.highlightRepository.findAll();
+	}
+
+	@RemoteMethod
+	public Highlight getHighlight(String id) {
+		return this.highlightRepository.findById(id).orElse(null);
+	}
+
+	@RemoteMethod
 	public Highlight create(CreateHighlightInput highlightInput) {
 		Highlight highlight = new Highlight();
-		Page page = this.pageService.findById(highlightInput.getIdPage());
+		Page page = this.pageService.getPage(highlightInput.getIdPage());
 
 		highlight.setUri(highlightInput.getUri());
 		highlight.setTitle(highlightInput.getTitle());
@@ -44,17 +58,18 @@ public class HighlightService {
 		return highlight;
 	}
 
+	@RemoteMethod
 	public Highlight update(UpdateHighlightInput highlightInput) {
-		Highlight highlight = this.findById(highlightInput.getId());
+		Highlight highlight = this.getHighlight(highlightInput.getId());
 
 		Page pageFrom = null;
 
 		try {
-			pageFrom = this.pageService.findById(highlight.getPage().getId());
+			pageFrom = this.pageService.getPage(highlight.getPage().getId());
 		} catch (Exception e) {
 		}
 
-		Page pageTo = this.pageService.findById(highlightInput.getIdPage());
+		Page pageTo = this.pageService.getPage(highlightInput.getIdPage());
 
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(highlightInput.getId()));
@@ -76,10 +91,11 @@ public class HighlightService {
 			this.pageService.addPageHighlight(pageTo, highlight);
 		}
 
-		return this.findById(highlightInput.getId());
+		return this.getHighlight(highlightInput.getId());
 	}
 
-	public boolean delete(String id) {
+	@RemoteMethod
+	public boolean deletePage(String id) {
 		Update update = new Update();
 		update.pull("highlights", new DBRef("highlight", id));
 
@@ -92,10 +108,6 @@ public class HighlightService {
 		}
 
 		return true;
-	}
-
-	public Highlight findById(String id) {
-		return this.highlightRepository.findById(id).orElse(null);
 	}
 
 }

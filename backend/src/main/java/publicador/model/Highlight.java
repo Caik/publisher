@@ -1,24 +1,33 @@
 package publicador.model;
 
+import org.directwebremoting.annotations.DataTransferObject;
+import org.directwebremoting.annotations.RemoteProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
+@DataTransferObject
 public class Highlight {
 
 	@Id
+	@RemoteProperty
 	private String id;
 
+	@RemoteProperty
 	private String uri;
 
+	@RemoteProperty
 	private String title;
 
+	@RemoteProperty
 	private String subtitle;
 
+	@RemoteProperty
 	private String text;
 
 	@DBRef
+	@RemoteProperty
 	private Page page;
 
 	public String getId() {
