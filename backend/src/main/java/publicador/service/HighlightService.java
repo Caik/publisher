@@ -95,7 +95,7 @@ public class HighlightService {
 	}
 
 	@RemoteMethod
-	public boolean deletePage(String id) {
+	public boolean deleteHighlight(String id) {
 		Update update = new Update();
 		update.pull("highlights", new DBRef("highlight", id));
 

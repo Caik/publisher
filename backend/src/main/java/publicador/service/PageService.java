@@ -41,7 +41,7 @@ public class PageService {
 	public Page createPage(CreatePageInput pageInput) {
 		Page page = new Page();
 
-		page.setUrl(pageInput.getUrl());
+		page.setUrl(pageInput.getUrl().replace("**__**", "/"));
 		page.setTitle(pageInput.getTitle());
 
 		return this.pageRepository.insert(page);
@@ -69,6 +69,7 @@ public class PageService {
 		Update update = new Update();
 		update.set("page", null);
 
+		// TODO Arrumar isso, ta inserindo sem ter ngm
 		this.mongoTemplate.upsert(query, update, Highlight.class);
 
 		try {
@@ -91,6 +92,14 @@ public class PageService {
 		page.getHighlights().remove(highlight);
 
 		return this.pageRepository.save(page);
+	}
+
+	@RemoteMethod
+	public Page getPageFromHighlightId(String idHighlight) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("highlights").is(new DBRef("highlight", idHighlight)));
+
+		return this.mongoTemplate.findOne(query, Page.class);
 	}
 
 }

@@ -37,7 +37,7 @@ export class PagesComponent implements OnInit {
 	deletePage(page: Page) {
 		this.pagesService.deletePage(page).subscribe(() => {
 			this.showAlert = true;
-			this.pages = this.pagesService.getPages();
+			this.getPages();
 			this.pageToExclude = null;
 
 			setTimeout(() => {
@@ -47,6 +47,10 @@ export class PagesComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		this.getPages();
+	}
+
+	private getPages(): void {
 		this.pages = this.pagesService.getPages();
 	}
 

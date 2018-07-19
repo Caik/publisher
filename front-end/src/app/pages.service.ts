@@ -2,19 +2,94 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 import gql from 'graphql-tag';
 
 import { Page } from './graphql/page';
 import { Query } from './graphql/query';
+import { environment } from '../environments/environment';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class PagesService {
 
-	constructor(private apollo: Apollo) { }
+	private dwrPSURL: String = `${environment.backendUrl}/dwr/jsonp/PageService/`;
 
-	getPages(): Observable<Page[]> {
+	constructor(private apollo: Apollo, private http: HttpClient) { }
+
+	public getPages(): Observable<Page[]> {
+		if (environment.dwr) {
+			return this.getPagesDWR();
+		}
+
+		return this.getPagesGraphQL();
+	}
+
+	public getPage(id: String): Observable<Page> {
+		if (environment.dwr) {
+			return this.getPageDWR(id);
+		}
+
+		return this.getPageGraphQL(id);
+	}
+
+	public deletePage(page: Page): Observable<Boolean> {
+		if (environment.dwr) {
+			return this.deletePageDWR(page);
+		}
+
+		return this.deletePageGraphQL(page);
+	}
+
+	public insertPage(page: Page): Observable<Page> {
+		if (environment.dwr) {
+			return this.insertPageDWR(page);
+		}
+
+		return this.insertPageGraphQL(page);
+	}
+
+	private insertPageGraphQL(page: Page): Observable<Page> {
+		return this.apollo.mutate<Page>({
+			mutation: gql`
+				mutation CreatePage($input: CreatePageInput!) {
+					createPage(input: $input) {
+						id
+					}
+				}
+			`,
+			variables: {
+				input: {
+					...page
+				}
+			}
+		}).pipe(map(result => result.data.createPage));
+	}
+
+	private insertPageDWR(page: Page): Observable<Page> {
+		console.log(`${this.dwrPSURL}createPage/${this.mountURLParameter(page)}`);
+		return this.http.get<Page>(`${this.dwrPSURL}createPage/${this.mountURLParameter(page)}`);
+	}
+
+	updatePage(page: Page): Observable<Page> {
+		return this.apollo.mutate<Page>({
+			mutation: gql`
+				mutation UpdatePage($input: UpdatePageInput!) {
+					updatePage(input: $input) {
+						id
+					}
+				}
+			`,
+			variables: {
+				input: {
+					...page
+				}
+			}
+		}).pipe(map(result => result.data.updatePage));
+	}
+
+	private getPagesGraphQL(): Observable<Page[]> {
 		return this.apollo.watchQuery<Query>({
 			query: gql`
 				query allPages {
@@ -33,7 +108,11 @@ export class PagesService {
 		}).valueChanges.pipe(map(result => result.data.getPages));
 	}
 
-	getPage(id: String): Observable<Page> {
+	private getPagesDWR(): Observable<Page[]> {
+		return this.http.get<Page[]>(`${this.dwrPSURL}getPages`);
+	}
+
+	private getPageGraphQL(id: String): Observable<Page> {
 		return this.apollo.query<Query>({
 			query: gql`
 				query getPage($id: String!) {
@@ -59,41 +138,11 @@ export class PagesService {
 		}).pipe(map(result => result.data.getPage));
 	}
 
-	insertPage(page: Page): Observable<Page> {
-		return this.apollo.mutate<Page>({
-			mutation: gql`
-				mutation CreatePage($input: CreatePageInput!) {
-					createPage(input: $input) {
-						id
-					}
-				}
-			`,
-			variables: {
-				input: {
-					...page
-				}
-			}
-		}).pipe(map(result => result.data.createPage));
+	private getPageDWR(id: String): Observable<Page> {
+		return this.http.get<Page>(`${this.dwrPSURL}getPage/${id}`);
 	}
 
-	updatePage(page: Page): Observable<Page> {
-		return this.apollo.mutate<Page>({
-			mutation: gql`
-				mutation UpdatePage($input: UpdatePageInput!) {
-					updatePage(input: $input) {
-						id
-					}
-				}
-			`,
-			variables: {
-				input: {
-					...page
-				}
-			}
-		}).pipe(map(result => result.data.updatePage));
-	}
-
-	deletePage(page: Page): Observable<Boolean> {
+	private deletePageGraphQL(page: Page): Observable<Boolean> {
 		return this.apollo.mutate<Boolean>({
 			mutation: gql`
 				mutation DeletePage($id: String!) {
@@ -106,4 +155,23 @@ export class PagesService {
 		}).pipe(map(result => result.data.deletePage));
 	}
 
+	private deletePageDWR(page: Page): Observable<Boolean> {
+		return this.http.get<Boolean>(`${this.dwrPSURL}deletePage/${page.id}`);
+	}
+
+
+	private mountURLParameter(page: Page): string {
+		let uri = '{';
+
+		for (const key in page) {
+			if (page.hasOwnProperty(key)) {
+				uri += `${key}: ${page[key]}, `;
+			}
+		}
+
+		uri = uri.replace(/, $/, '').replace(/\//gm, '**__**');
+		uri += '}';
+
+		return uri;
+	}
 }

@@ -27,7 +27,6 @@ public class Highlight {
 	private String text;
 
 	@DBRef
-	@RemoteProperty
 	private Page page;
 
 	public String getId() {

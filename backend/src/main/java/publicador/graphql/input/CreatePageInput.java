@@ -28,4 +28,9 @@ public class CreatePageInput {
 		this.title = title;
 	}
 
+	@Override
+	public String toString() {
+		return "CreatePageInput [url=" + url + ", title=" + title + "]";
+	}
+
 }

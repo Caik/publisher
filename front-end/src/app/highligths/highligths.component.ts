@@ -25,6 +25,10 @@ export class HighligthsComponent implements OnInit {
 	constructor(private hlService: HighlightsService, private modalService: NgbModal) { }
 
 	ngOnInit() {
+		this.getHighlights();
+	}
+
+	private getHighlights() {
 		this.highlights = this.hlService.getHighlights();
 	}
 
@@ -41,7 +45,7 @@ export class HighligthsComponent implements OnInit {
 	deleteHighlight(highlight: Highlight) {
 		this.hlService.deleteHighlight(highlight).subscribe(() => {
 			this.showAlert = true;
-			this.highlights = this.hlService.getHighlights();
+			this.getHighlights();
 			this.highlightToExclude = null;
 
 			setTimeout(() => {

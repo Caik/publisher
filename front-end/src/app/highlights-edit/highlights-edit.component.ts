@@ -98,6 +98,9 @@ export class HighlightsEditComponent implements OnInit, OnDestroy {
 	}
 
 	compare(p1: Page, p2: Page): Boolean {
+		// console.log('p1', p1);
+		// console.log('p2', p2);
+
 		return p1 && p2 && (p1.id === p2.id);
 	}
 

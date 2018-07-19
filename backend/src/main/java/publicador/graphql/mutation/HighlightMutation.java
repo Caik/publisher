@@ -25,7 +25,7 @@ public class HighlightMutation implements GraphQLMutationResolver {
 	}
 
 	public boolean deleteHighlight(String id) {
-		return this.highlightService.deletePage(id);
+		return this.highlightService.deleteHighlight(id);
 	}
 
 }

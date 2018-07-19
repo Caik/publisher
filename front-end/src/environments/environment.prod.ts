@@ -1,4 +1,5 @@
 export const environment = {
 	production: true,
-	backendUrl: 'http://pub-back-end:8080'
+	backendUrl: 'http://pub-back-end:8080',
+	dwr: true
 };
