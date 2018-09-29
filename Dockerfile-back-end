@@ -1,8 +1,0 @@
-FROM maven:3.5.3-alpine
-WORKDIR /usr/src/java-code
-COPY ./backend/ /usr/src/java-code/
-RUN mvn clean package -DskipTests
-
-WORKDIR /usr/src/java-app
-RUN cp /usr/src/java-code/target/*.jar ./app.jar
-CMD ["java", "-jar", "app.jar"]

@@ -1,38 +1,38 @@
-version: '3'
+version: "3"
 services:
-    pub-back-end:
-        build:
-            context: .
-            dockerfile: 'Dockerfile-back-end'
-        image: 'pub-back-end:latest'
-        ports:
-            - '${BACK_LOCAL_PORT}:${BACK_CONTAINER_PORT}'
-        networks:
-            - pub
-        environment:
-            - 'DB_DATABASE_NAME=${DB_DATABASE_NAME}'
-            - 'DB_CONTAINER_HOST=${DB_CONTAINER_HOST}'
-        depends_on:
-            - pub-db
-    pub-front-end:
-        build:
-            context: .
-            dockerfile: 'Dockerfile-front-end'
-        image: 'pub-front-end:latest'
-        ports:
-            - '${FRONT_LOCAL_PORT}:${FRONT_CONTAINER_PORT}'
-        networks:
-            - pub
-    pub-db:
-        image: mongo
-        volumes:
-            - 'db-data:/data/db'
-        ports:
-            - '${DB_LOCAL_PORT}:${DB_CONTAINER_PORT}'
-        networks:
-            - pub
+  pub-backend:
+    build:
+      context: .
+      dockerfile: "Dockerfile-backend"
+    image: "pub-backend:latest"
+    ports:
+      - "${BACK_LOCAL_PORT}:${BACK_CONTAINER_PORT}"
+    networks:
+      - pub
+    environment:
+      - "DB_DATABASE_NAME=${DB_DATABASE_NAME}"
+      - "DB_CONTAINER_HOST=${DB_CONTAINER_HOST}"
+    depends_on:
+      - pub-db
+  pub-frontend:
+    build:
+      context: .
+      dockerfile: "Dockerfile-frontend"
+    image: "pub-frontend:latest"
+    ports:
+      - "${FRONT_LOCAL_PORT}:${FRONT_CONTAINER_PORT}"
+    networks:
+      - pub
+  pub-db:
+    image: mongo
+    volumes:
+      - "db-data:/data/db"
+    ports:
+      - "${DB_LOCAL_PORT}:${DB_CONTAINER_PORT}"
+    networks:
+      - pub
 volumes:
-    db-data: null
+  db-data: null
 networks:
-    pub:
-        driver: bridge
+  pub:
+    driver: bridge
