@@ -1,0 +1,23 @@
+<app-breadcrumb [title]=this.title [breadcrumb]=this.breadcrumb></app-breadcrumb>
+
+<div class="row text-center">
+	<h3 class="col-md-12">Visualizando página:
+		<span class="font-weight-bold text-info">{{ page.title }}</span>
+	</h3>
+</div>
+<div class="text-center border border-primary p-3 mb-5">
+	<div *ngFor="let hl of page.highlights; let i = index">
+		<h6 class="font-weight-bold">URL:
+			<font class="text-danger">{{ page.url }}/{{ hl.uri }}</font>
+		</h6>
+		<div class="row" [class.mb-5]="i !== page.highlights.length - 1">
+			<div class="col-md-2"></div>
+			<div class="col-md-8 border p-1">
+				<h5 class="font-weight-bold text-primary">{{ hl.title }}</h5>
+				<h6 class="text-info">{{ hl.subtitle }}</h6>
+				<p class="font-weight-bold">{{ hl.text }}</p>
+			</div>
+			<div class="col-md-2"></div>
+		</div>
+	</div>
+</div>

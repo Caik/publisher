@@ -1,0 +1,25 @@
+type Highlight {
+	id: String!
+	uri: String!
+	title: String!
+	subtitle: String!
+	text: String!
+	page: Page
+}
+
+input CreateHighlightInput {
+	uri: String!
+	title: String!
+	subtitle: String!
+	text: String!
+	idPage: String!
+}
+
+input UpdateHighlightInput {
+	id: String!
+	uri: String
+	title: String
+	subtitle: String
+	text: String
+	idPage: String
+}

@@ -1,0 +1,17 @@
+type Page {
+	id: String!
+	url: String!
+	title: String!
+	highlights: [Highlight]
+}
+
+input CreatePageInput {
+	url: String!
+	title: String!
+}
+
+input UpdatePageInput {
+	id: String!
+	url: String
+	title: String
+}

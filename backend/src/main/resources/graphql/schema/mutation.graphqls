@@ -1,0 +1,9 @@
+type Mutation {
+	createPage(input: CreatePageInput!): Page!
+	updatePage(input: UpdatePageInput!): Page!
+	deletePage(id: String!): Boolean!
+	
+	createHighlight(input: CreateHighlightInput!): Highlight!
+	updateHighlight(input: UpdateHighlightInput!): Highlight!
+	deleteHighlight(id: String!): Boolean!
+}

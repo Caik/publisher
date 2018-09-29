@@ -1,0 +1,80 @@
+<app-breadcrumb [title]=this.title [breadcrumb]=this.breadcrumb></app-breadcrumb>
+
+<ngb-alert *ngIf="showAlert" type="success" (close)="showAlert=redirectToList">{{ sucessMessage }}</ngb-alert>
+
+<div style="padding-bottom: 20px">
+	<button type="button" class="btn btn-success" routerLink="/highlights/edit">
+		<i class="fas fa-plus fa-sm"></i>
+		Novo Destaque</button>
+</div>
+
+<table class="table table-hover table-bordered table-striped text-center">
+	<thead>
+		<tr>
+			<th scope="col">Titulo</th>
+			<th scope="col">Subtítulo</th>
+			<th scope="col">URL</th>
+			<th scope="col">Página</th>
+			<th scope="col" style="width: 200px">Ações</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let hl of highlights | async">
+			<td>{{ hl.title }}</td>
+			<td>{{ hl.subtitle }}</td>
+			<td>{{ hl.uri }}</td>
+			<td>
+				<a *ngIf="hl.page" routerLink="/pages/edit/{{ hl.page.id }}">{{ hl.page.title }}</a>
+			</td>
+			<td>
+				<button class="btn btn-warning btn-sm" routerLink="/highlights/edit/{{ hl.id }}">
+					<i class="fas fa-pen fa-sm"></i>
+					Editar
+				</button>
+				&nbsp;
+				<button class="btn btn-danger btn-sm" (click)="openDeleteModal(content, hl)">
+					<i class="fas fa-times fa-sm"></i>
+					Remover
+				</button>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<ng-template #content let-close="close">
+	<div class="modal-header">
+		<h4 class="modal-title text-danger font-weight-bold">Exclusão de destaque</h4>
+		<button type="button" class="close" aria-label="Close" (click)="close(false)">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<h6 class="text-center font-weight-bold">Deseja realmente excluir o seguinte destaque?</h6>
+		<br>
+		<div class="row">
+			<div class="col-md-4 font-weight-bold text-right">Título:</div>
+			<div class="col-md-8">{{ highlightToExclude.title }}</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4 font-weight-bold text-right">Subtítulo:</div>
+			<div class="col-md-8">{{ highlightToExclude.subtitle }}</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4 font-weight-bold text-right">URL:</div>
+			<div class="col-md-8">{{ highlightToExclude.uri }}</div>
+		</div>
+		<div *ngIf="highlightToExclude.page" class="row">
+			<div class="col-md-4 font-weight-bold text-right">Página:</div>
+			<div class="col-md-8">{{ highlightToExclude.page.title }}</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-md-12 text-center">OBS: A página vinculada
+				<strong>NÃO</strong> será excluída</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-success" (click)="close(false)">Não</button>
+		<button type="button" class="btn btn-danger" (click)="close(true)">Sim</button>
+	</div>
+</ng-template>

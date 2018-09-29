@@ -1,0 +1,7 @@
+type Query {
+	getPage(id: String!): Page
+	getPages: [Page]
+	
+	getHighlight(id: String!): Highlight
+	getHighlights: [Highlight]
+}
